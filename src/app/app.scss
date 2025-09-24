@@ -1,8 +1,47 @@
 :host{display:block;min-height:100dvh}
 .bg{position:fixed;inset:0;display:block;z-index:0}
-.topbar{position:fixed;inset:auto 0 0 0; top:0; z-index:2; padding:0 .5rem}
-mat-toolbar{backdrop-filter:saturate(140%) blur(6px); background:transparent}
-.brand{font-weight:600}
+.topbar{position:fixed;top:0;left:0;right:0;z-index:2}
+mat-toolbar{
+  height:64px;
+  padding:0 16px;
+  background:rgba(255,255,255,.08);
+  backdrop-filter:saturate(160%) blur(14px);
+  -webkit-backdrop-filter:saturate(160%) blur(14px);
+  border-bottom:1px solid rgba(255,255,255,.16);
+  border-radius:0 0 24px 24px;
+  box-shadow:0 8px 30px rgba(0,0,0,.25) inset, 0 10px 30px rgba(0,0,0,.25);
+  color:#fff;
+}
+.brand{font-weight:700;font-size:26px;letter-spacing:.2px}
 .spacer{flex:1}
-.content{position:relative; z-index:1; min-height:100dvh; padding:4rem 1rem 1rem; display:flex; flex-direction:column}
-@media (min-width:768px){ .content{padding:5rem 2rem 2rem} }
+.content{position:relative;z-index:1;min-height:100dvh;padding:80px 16px 16px}
+
+:host ::ng-deep .mat-button-toggle-group{
+  background:rgba(255,255,255,.10);
+  border-radius:9999px;
+  border:1px solid rgba(255,255,255,.22);
+  padding:4px;
+  backdrop-filter:saturate(160%) blur(12px);
+  -webkit-backdrop-filter:saturate(160%) blur(12px);
+}
+:host ::ng-deep .mat-button-toggle-appearance-standard{
+  border:none;
+}
+:host ::ng-deep .mat-button-toggle-button{
+  border-radius:9999px;
+}
+:host ::ng-deep .mat-button-toggle-label-content{
+  padding:6px 18px;
+  font-family:var(--ios-font);
+  font-size:26px;
+  line-height:1;
+  font-weight:700;
+  letter-spacing:.2px;
+  color:#eaeaea;
+}
+:host ::ng-deep .mat-button-toggle-checked .mat-button-toggle-label-content{
+  background:linear-gradient(180deg, rgba(255,255,255,.22), rgba(255,255,255,.10));
+  border-radius:9999px;
+  color:#111;
+}
+:host ::ng-deep .mat-button-toggle-focus-overlay{ display:none; }
