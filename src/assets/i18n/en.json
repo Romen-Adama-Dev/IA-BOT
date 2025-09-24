@@ -1,1 +1,8 @@
-{ "app": { "title": "SimplyBot" } }
+{ 
+  "app": { "title": "SimplyBot" },
+  "hero": {
+    "title": "Automate with Smart Bots",
+    "subtitle": "Easily manage appointments, calendars, and processes with n8n. All in a single flow.",
+    "cta": { "primary": "Try MVP", "secondary": "View Flows" }
+  }
+}

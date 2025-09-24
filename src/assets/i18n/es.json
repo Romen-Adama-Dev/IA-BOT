@@ -1,1 +1,8 @@
-{ "app": { "title": "Simply-Bot" } }
+{ 
+  "app": { "title": "SimplyBot" },
+  "hero": {
+    "title": "Automatiza con Bots Inteligentes",
+    "subtitle": "Gestiona citas, calendarios y procesos con n8n de forma simple y rápida. Todo en un solo flujo.",
+    "cta": { "primary": "Probar MVP", "secondary": "Ver flujos" }
+  }
+}

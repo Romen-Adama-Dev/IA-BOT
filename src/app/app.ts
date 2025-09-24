@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core'
+import { Component, signal, inject } from '@angular/core'
 import { TranslateModule } from '@ngx-translate/core'
 import { MatToolbarModule } from '@angular/material/toolbar'
 import { MatButtonToggleModule, MAT_BUTTON_TOGGLE_DEFAULT_OPTIONS } from '@angular/material/button-toggle'
@@ -15,16 +15,12 @@ import { LangService } from './services/lang.service'
   providers: [
     {
       provide: MAT_BUTTON_TOGGLE_DEFAULT_OPTIONS,
-      useValue: {
-        appearance: 'standard',
-        hideSingleSelectionIndicator: true,
-        hideMultipleSelectionIndicator: true,
-        disabledInteractive: false
-      }
+      useValue: { appearance: 'standard', hideSingleSelectionIndicator: true, hideMultipleSelectionIndicator: true, disabledInteractive: false }
     }
   ]
 })
 export class AppComponent {
   protected readonly title = signal('ia-bot')
-  constructor(public lang: LangService) {}
+  readonly lang = inject(LangService)
+  scrollTo(id: string){ document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' }) }
 }

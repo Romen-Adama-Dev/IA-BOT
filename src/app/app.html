@@ -4,19 +4,36 @@
   <mat-toolbar>
     <div class="brand" aria-label="Marca">{{ 'app.title' | translate }}</div>
     <span class="spacer"></span>
-
-    <mat-button-toggle-group
-      class="ios-toggle"
-      [value]="lang.current()"
-      (change)="lang.use($event.value)"
-      name="lang"
-      aria-label="Idioma"
-      [appearance]="'standard'"
-      [multiple]="false">
+    <mat-button-toggle-group class="ios-toggle" [value]="lang.current()" (change)="lang.use($event.value)" name="lang" aria-label="Idioma" [appearance]="'standard'" [multiple]="false">
       <mat-button-toggle value="es">ES</mat-button-toggle>
       <mat-button-toggle value="en">EN</mat-button-toggle>
     </mat-button-toggle-group>
   </mat-toolbar>
 </header>
 
-<main class="content" role="main" tabindex="-1"></main>
+<main class="content" role="main" tabindex="-1">
+  <section class="hero">
+    <div class="hero-content">
+      <h1>{{ 'hero.title' | translate }}</h1>
+      <p class="subtitle">{{ 'hero.subtitle' | translate }}</p>
+      <div class="cta-buttons">
+        <button class="ios-btn primary" (click)="scrollTo('mvp')">{{ 'hero.cta.primary' | translate }}</button>
+        <button class="ios-btn secondary" (click)="scrollTo('flows')">{{ 'hero.cta.secondary' | translate }}</button>
+      </div>
+    </div>
+  </section>
+
+  <section id="mvp" class="card glass">
+    <h2> MVP · SimplyBot</h2>
+    <p> Bot de citas y calendario integrado con n8n. Captura leads, agenda automática, recordatorios y actualizaciones por email/WhatsApp. </p>
+  </section>
+
+  <section id="flows" class="card glass">
+    <h2> Flujos n8n</h2>
+    <ul class="features">
+      <li> Intake → Validación → Calendario</li>
+      <li> Confirmación → Recordatorio → Reprogramación</li>
+      <li> No-show → Follow-up</li>
+    </ul>
+  </section>
+</main>
