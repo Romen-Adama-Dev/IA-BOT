@@ -1,22 +1,18 @@
 import { ApplicationConfig, importProvidersFrom } from '@angular/core'
 import { provideAnimations } from '@angular/platform-browser/animations'
-import { HttpClientModule, HttpClient } from '@angular/common/http'
+import { provideHttpClient, withFetch, HttpClient } from '@angular/common/http'
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core'
-import { TranslateHttpLoader } from '@ngx-translate/http-loader'
-
-export function HttpLoaderFactory(http: HttpClient) {
-  return new TranslateHttpLoader()
-}
+import { AssetsTranslateLoader } from './i18n/assets-translate.loader'
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideAnimations(),
+    provideHttpClient(withFetch()),
     importProvidersFrom(
-      HttpClientModule,
       TranslateModule.forRoot({
         loader: {
           provide: TranslateLoader,
-          useFactory: HttpLoaderFactory,
+          useClass: AssetsTranslateLoader,
           deps: [HttpClient]
         },
         fallbackLang: 'es'

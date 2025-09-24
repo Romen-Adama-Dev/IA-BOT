@@ -1,12 +1,24 @@
-import { mergeApplicationConfig, ApplicationConfig } from '@angular/core';
-import { provideServerRendering, withRoutes } from '@angular/ssr';
-import { appConfig } from './app.config';
-import { serverRoutes } from './app.routes.server';
+import { ApplicationConfig, importProvidersFrom } from '@angular/core'
+import { provideNoopAnimations } from '@angular/platform-browser/animations'
+import { provideServerRendering } from '@angular/platform-server'
+import { provideHttpClient, withFetch, HttpClient } from '@angular/common/http'
+import { TranslateLoader, TranslateModule } from '@ngx-translate/core'
+import { AssetsTranslateLoader } from './i18n/assets-translate.loader'
 
-const serverConfig: ApplicationConfig = {
+export const appConfig: ApplicationConfig = {
   providers: [
-    provideServerRendering(withRoutes(serverRoutes))
+    provideServerRendering(),
+    provideNoopAnimations(),
+    provideHttpClient(withFetch()),
+    importProvidersFrom(
+      TranslateModule.forRoot({
+        loader: {
+          provide: TranslateLoader,
+          useClass: AssetsTranslateLoader,
+          deps: [HttpClient]
+        },
+        fallbackLang: 'es'
+      })
+    )
   ]
-};
-
-export const config = mergeApplicationConfig(appConfig, serverConfig);
+}

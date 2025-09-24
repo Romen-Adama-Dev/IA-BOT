@@ -1,3 +1,8 @@
 :host{display:block;min-height:100dvh}
 .bg{position:fixed;inset:0;display:block;z-index:0}
-.content{position:relative;z-index:1;min-height:100dvh}
+.topbar{position:fixed;inset:auto 0 0 0; top:0; z-index:2; padding:0 .5rem}
+mat-toolbar{backdrop-filter:saturate(140%) blur(6px); background:transparent}
+.brand{font-weight:600}
+.spacer{flex:1}
+.content{position:relative; z-index:1; min-height:100dvh; padding:4rem 1rem 1rem; display:flex; flex-direction:column}
+@media (min-width:768px){ .content{padding:5rem 2rem 2rem} }
