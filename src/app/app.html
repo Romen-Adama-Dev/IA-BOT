@@ -1,19 +1,22 @@
 <app-liquid-ether class="bg"></app-liquid-ether>
 
 <header class="topbar" role="banner">
-  <mat-toolbar color="transparent">
-    <div class="brand" aria-label="Startup">{{ 'app.title' | translate }}</div>
+  <mat-toolbar>
+    <div class="brand" aria-label="Marca">{{ 'app.title' | translate }}</div>
     <span class="spacer"></span>
+
     <mat-button-toggle-group
+      class="ios-toggle"
       [value]="lang.current()"
       (change)="lang.use($event.value)"
       name="lang"
-      aria-label="Idioma">
+      aria-label="Idioma"
+      [appearance]="'standard'"
+      [multiple]="false">
       <mat-button-toggle value="es">ES</mat-button-toggle>
       <mat-button-toggle value="en">EN</mat-button-toggle>
     </mat-button-toggle-group>
   </mat-toolbar>
 </header>
 
-<main class="content" role="main" tabindex="-1">
-</main>
+<main class="content" role="main" tabindex="-1"></main>
