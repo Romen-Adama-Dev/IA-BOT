@@ -1,15 +1,16 @@
 import { Injectable } from '@angular/core';
+import { Observable, from } from 'rxjs';
 import { TranslateLoader } from '@ngx-translate/core';
-import { from, Observable } from 'rxjs';
 
 @Injectable()
 export class AssetsTranslateServerLoader implements TranslateLoader {
   getTranslation(lang: string): Observable<any> {
-    // Solo se compila/ejecuta en server build
-    return from(Promise.all([import('node:fs/promises'), import('node:path')]).then(async ([fs, path]) => {
+    return from((async () => {
+      const fs = await import('node:fs/promises');
+      const path = await import('node:path');
       const file = path.join(process.cwd(), 'src', 'assets', 'i18n', `${lang}.json`);
       const txt = await fs.readFile(file, 'utf8');
       return JSON.parse(txt);
-    }));
+    })());
   }
 }
