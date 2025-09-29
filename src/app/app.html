@@ -1,9 +1,22 @@
-<app-liquid-ether class="bg"></app-liquid-ether>
+<app-liquid-ether
+  class="bg"
+  [colors]="palette()"
+  [background]="bg()">
+</app-liquid-ether>
 
 <header class="topbar" role="banner">
   <mat-toolbar>
     <div class="brand" aria-label="Marca">{{ 'app.title' | translate }}</div>
     <span class="spacer"></span>
+
+    <button
+      mat-icon-button
+      class="theme-toggle"
+      (click)="toggleTheme()"
+      [attr.aria-label]="theme() === 'light' ? 'Activar tema oscuro' : 'Volver a tema claro'">
+      <mat-icon>{{ theme() === 'light' ? 'dark_mode' : 'light_mode' }}</mat-icon>
+    </button>
+
     <mat-button-toggle-group class="ios-toggle" [value]="lang.current()" (change)="lang.use($event.value)" name="lang" aria-label="Idioma" [appearance]="'standard'" [multiple]="false">
       <mat-button-toggle value="es">ES</mat-button-toggle>
       <mat-button-toggle value="en">EN</mat-button-toggle>

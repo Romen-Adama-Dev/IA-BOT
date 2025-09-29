@@ -27,47 +27,87 @@ export class LiquidEtherComponent implements AfterViewInit, OnChanges {
   @Input() takeoverDuration = 0.25
   @Input() autoResumeDelay = 3000
   @Input() autoRampDuration = 0.6
+  @Input() background: string = 'rgba(0,0,0,0)'
 
   private webgl: any
   private resizeObserver?: ResizeObserver
   private intersectionObserver?: IntersectionObserver
   private isVisible = true
   private raf: number | null = null
+  private paletteTex?: THREE.DataTexture
 
   private platformId = inject(PLATFORM_ID)
 
   constructor(private destroyRef: DestroyRef) {}
+
+  private parseColorToVec4(input: string, out: THREE.Vector4) {
+    try {
+      if (!input) { out.set(0, 0, 0, 0); return }
+      const s = String(input).trim()
+      if (s.startsWith('rgba')) {
+        const m = s.match(/rgba\s*\(\s*([\d.]+)\s*,\s*([\d.]+)\s*,\s*([\d.]+)\s*,\s*([\d.]+)\s*\)/i)
+        if (m) {
+          const r = Math.max(0, Math.min(255, parseFloat(m[1]))) / 255
+          const g = Math.max(0, Math.min(255, parseFloat(m[2]))) / 255
+          const b = Math.max(0, Math.min(255, parseFloat(m[3]))) / 255
+          const a = Math.max(0, Math.min(1, parseFloat(m[4])))
+          out.set(r, g, b, a)
+          return
+        }
+      }
+      if (s.startsWith('#')) {
+        if (s.length === 9) {
+          const r = parseInt(s.slice(1, 3), 16) / 255
+          const g = parseInt(s.slice(3, 5), 16) / 255
+          const b = parseInt(s.slice(5, 7), 16) / 255
+          const a = parseInt(s.slice(7, 9), 16) / 255
+          out.set(r, g, b, a)
+          return
+        } else {
+          const col = new THREE.Color(s)
+          out.set(col.r, col.g, col.b, 1)
+          return
+        }
+      }
+      const col = new THREE.Color(s as any)
+      out.set(col.r, col.g, col.b, 1)
+    } catch {
+      out.set(0, 0, 0, 0)
+    }
+  }
+
+  private makePaletteTexture(stops: string[]) {
+    const arr = Array.isArray(stops) && stops.length > 0
+      ? (stops.length === 1 ? [stops[0], stops[0]] : stops)
+      : ['#ffffff', '#ffffff']
+    const w = arr.length
+    const data = new Uint8Array(w * 4)
+    for (let i = 0; i < w; i++) {
+      const c = new THREE.Color(arr[i])
+      data[i * 4 + 0] = Math.round(c.r * 255)
+      data[i * 4 + 1] = Math.round(c.g * 255)
+      data[i * 4 + 2] = Math.round(c.b * 255)
+      data[i * 4 + 3] = 255
+    }
+    const tex = new THREE.DataTexture(data, w, 1, THREE.RGBAFormat)
+    tex.magFilter = THREE.LinearFilter
+    tex.minFilter = THREE.LinearFilter
+    tex.wrapS = THREE.ClampToEdgeWrapping
+    tex.wrapT = THREE.ClampToEdgeWrapping
+    tex.generateMipmaps = false
+    tex.needsUpdate = true
+    return tex
+  }
 
   ngAfterViewInit(): void {
     if (!isPlatformBrowser(this.platformId)) return
 
     const container = this.mountRef.nativeElement
 
-    function makePaletteTexture(stops: string[]) {
-      let arr: string[]
-      if (Array.isArray(stops) && stops.length > 0) arr = stops.length === 1 ? [stops[0], stops[0]] : stops
-      else arr = ['#ffffff', '#ffffff']
-      const w = arr.length
-      const data = new Uint8Array(w * 4)
-      for (let i = 0; i < w; i++) {
-        const c = new THREE.Color(arr[i])
-        data[i * 4 + 0] = Math.round(c.r * 255)
-        data[i * 4 + 1] = Math.round(c.g * 255)
-        data[i * 4 + 2] = Math.round(c.b * 255)
-        data[i * 4 + 3] = 255
-      }
-      const tex = new THREE.DataTexture(data, w, 1, THREE.RGBAFormat)
-      tex.magFilter = THREE.LinearFilter
-      tex.minFilter = THREE.LinearFilter
-      tex.wrapS = THREE.ClampToEdgeWrapping
-      tex.wrapT = THREE.ClampToEdgeWrapping
-      tex.generateMipmaps = false
-      tex.needsUpdate = true
-      return tex
-    }
-
-    const paletteTex = makePaletteTexture(this.colors)
+    this.paletteTex = this.makePaletteTexture(this.colors)
+    const paletteTex = this.paletteTex
     const bgVec4 = new THREE.Vector4(0, 0, 0, 0)
+    this.parseColorToVec4(this.background, bgVec4)
 
     class CommonClass {
       width = 0
@@ -487,7 +527,7 @@ void main(){
           },
           output: simProps.dst
         })
-        this.uniforms = this.props.material.uniforms
+        this.uniforms = this.props.material?.uniforms
         this.init()
       }
       override init() {
@@ -985,6 +1025,21 @@ void main(){
 
   ngOnChanges(): void {
     if (!this.webgl) return
+    try {
+      const outMesh = this.webgl.output?.output
+      const mat = outMesh?.material as THREE.RawShaderMaterial | undefined
+      if (mat?.uniforms?.['palette']) {
+        this.paletteTex = this.makePaletteTexture(this.colors)
+        mat.uniforms['palette'].value = this.paletteTex
+        mat.uniforms['palette'].value.needsUpdate = true
+      }
+      if (mat?.uniforms?.['bgColor']) {
+        const v = mat.uniforms['bgColor'].value as THREE.Vector4
+        if (v && v.isVector4) {
+          this.parseColorToVec4(this.background, v)
+        }
+      }
+    } catch {}
     const sim = this.webgl.output?.simulation
     if (!sim) return
     const prevRes = sim.options.resolution
