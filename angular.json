@@ -33,7 +33,7 @@
               "src/styles.scss"
             ],
             "outputMode": "static",
-            "outputPath": "dist/ia-bot/browser"
+            "outputPath": "dist/ia-bot"
           },
           "configurations": {
             "production": {
