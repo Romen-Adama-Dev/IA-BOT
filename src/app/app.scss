@@ -228,7 +228,7 @@ mat-toolbar.glass { /* aplica utilidad */
   gap:16px;
 }
 .social-links a{
-  color: var(--text);
+  color: inherit;
   font-size:20px;
   display:inline-flex;
   align-items:center;
@@ -244,7 +244,7 @@ mat-toolbar.glass { /* aplica utilidad */
  **************/
 .theme-toggle {
   margin-right: 8px;
-  color: var(--text);
+  color: inherit;
   opacity: .9;
   transition: opacity .2s ease, transform .2s ease;
 }
@@ -336,13 +336,6 @@ mat-toolbar.glass { /* aplica utilidad */
   box-shadow: var(--plate-shadow) !important;
 }
 
-/* fuerza el color en hijos de la toolbar (Angular Material suele fijar colores) */
-:host-context(.light) .mat-toolbar *,
-:host-context(.light) .mat-mdc-toolbar * {
-  color: var(--plate-text) !important;
-  fill: var(--plate-text) !important; /* por si algún svg usa fill */
-}
-
 /* Brand / icons / toggles plata */
 :host-context(.light) .brand,
 :host-context(.light) .theme-toggle,
@@ -357,10 +350,6 @@ mat-toolbar.glass { /* aplica utilidad */
   border: 1px solid var(--plate-border) !important;
   box-shadow: var(--plate-shadow) !important;
 }
-:host-context(.light) .card.glass h2,
-:host-context(.light) .card.glass p {
-  color: var(--plate-text) !important;
-}
 
 /* Footer con plata */
 :host-context(.light) .footer {
@@ -368,18 +357,6 @@ mat-toolbar.glass { /* aplica utilidad */
   color: var(--plate-text) !important;
   border-top: 1px solid var(--plate-border) !important;
   box-shadow: 0 -2px 14px rgba(0,0,0,.22) !important;
-}
-:host-context(.light) .footer * {
-  color: var(--plate-text) !important;
-  fill: var(--plate-text) !important;
-}
-:host-context(.light) .footer .copyright,
-:host-context(.light) .social-links a {
-  color: var(--plate-text) !important;
-}
-:host-context(.light) .social-links a:hover {
-  opacity: 1;
-  filter: brightness(1.08);
 }
 
 /* Botones dentro de backplates (toolbar/card/footer) con plata */
@@ -427,5 +404,3 @@ mat-toolbar.glass { /* aplica utilidad */
   color: inherit !important;
   fill: currentColor !important;
 }
-/* Asegura que todo el componente hereda el color temático */
-:host { color: var(--text); }
