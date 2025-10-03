@@ -6,7 +6,18 @@
 
 <header class="topbar" role="banner">
   <mat-toolbar>
-    <div class="brand" aria-label="Marca">{{ 'app.title' | translate }}</div>
+    <div class="brand" aria-label="Marca">
+      <img
+        class="brand__logo"
+        src="assets/logos/logo.png"
+        alt=""
+        width="28"
+        height="28"
+        decoding="async"
+        fetchpriority="high" />
+      <span class="brand__name">{{ 'app.title' | translate }}</span>
+    </div>
+
     <span class="spacer"></span>
 
     <button
